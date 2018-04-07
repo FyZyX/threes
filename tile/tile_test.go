@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestCreateTile(t *testing.T) {
+func TestTile_IsEmpty(t *testing.T) {
 	var tile Tile
 
 	if !tile.IsEmpty() {
@@ -16,12 +16,20 @@ func TestCreateTile(t *testing.T) {
 	}
 }
 
-func TestSetTileValue(t *testing.T) {
+func TestTile_SetValue(t *testing.T) {
 	var tile Tile
 	var value uint8 = 0
 	tile.SetValue(value)
 
 	if tile.value != value {
 		t.Errorf("Unexpected value: should be %v, but got %v instead", tile.value, value)
+	}
+}
+
+func TestTile_Value(t *testing.T) {
+	tile := Tile{0}
+
+	if tile.Value() != tile.value {
+		t.Errorf("Unexpected value: should be %v, but got %v instead", tile.Value(), tile.value)
 	}
 }
