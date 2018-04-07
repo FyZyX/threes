@@ -1,6 +1,7 @@
 package tile
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -80,6 +81,17 @@ func TestMerge(t *testing.T) {
 	tile, err = Merge(t1, t2)
 	if err == nil {
 		t.Error("Tiles of value 1 can only be merged with tiles of value 2")
+	}
+}
+
+func TestTile_String(t *testing.T) {
+	tile := Tile{3}
+	tileString := `3`
+
+	expected := tileString
+	actual := fmt.Sprint(tile)
+	if actual != expected {
+		t.Errorf("New tile printed incorecctly. Got:\n%v\nWanted:\n%v\n", actual, expected)
 	}
 }
 

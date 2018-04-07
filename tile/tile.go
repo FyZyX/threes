@@ -45,6 +45,10 @@ func Merge(t1 Tile, t2 Tile) (tile Tile, err error) {
 	return Tile{t1.value + t2.value}, err
 }
 
+func (tile Tile) String() string {
+	return fmt.Sprintf("%v", tile.value)
+}
+
 func (e IncompatibleTilesError) Error() (err string) {
 	return fmt.Sprintf("Incompatible tile values: %v and %v", e.t1.value, e.t2.value)
 }
