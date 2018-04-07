@@ -11,6 +11,10 @@ type (
 		Row    uint8
 		Column uint8
 	}
+
+	TileGenerator interface {
+		Generate() Tile
+	}
 )
 
 func NewBoard() Board {
