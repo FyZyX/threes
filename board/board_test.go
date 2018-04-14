@@ -58,3 +58,77 @@ func TestBoard_AddTile(t *testing.T) {
 		t.Error("Tile should not be empty")
 	}
 }
+
+func TestBoard_Slide(t *testing.T) {
+	var tile Tile
+	tile.SetValue(3)
+
+	var board Board
+	index := Index{0, 0}
+
+	var t1, t2, t3, t4, t5, t6, t7 Tile
+
+	fmt.Println()
+	board.AddTile(tile, index)
+	t2.SetValue(3)
+	board.AddTile(t2, Index{0, 1})
+	t3.SetValue(3)
+	board.AddTile(t3, Index{1, 1})
+	t4.SetValue(3)
+	board.AddTile(t4, Index{2, 1})
+	t5.SetValue(3)
+	board.AddTile(t5, Index{0, 3})
+	t6.SetValue(3)
+	board.AddTile(t6, Index{1, 3})
+	t7.SetValue(3)
+	board.AddTile(t7, Index{1, 0})
+	fmt.Println(board)
+	fmt.Println()
+	board.Slide(Up)
+	board.Slide(Right)
+	board.Slide(Right)
+	fmt.Println(board)
+
+	expected := `|     0 |     0 |     6 |    12 |
+|     0 |     0 |     0 |     3 |
+|     0 |     0 |     0 |     0 |
+|     0 |     0 |     0 |     0 |`
+
+	if board.String() != expected {
+		t.Errorf("Incorrect board configuration: expected\n%s\nactual\n%s\n", expected, board)
+	}
+
+	board = Board{}
+	fmt.Println()
+	t1.SetValue(6)
+	board.AddTile(t1, Index{0, 0})
+	t2.SetValue(6)
+	board.AddTile(t2, Index{0, 1})
+	t3.SetValue(6)
+	board.AddTile(t3, Index{1, 1})
+	t4.SetValue(6)
+	board.AddTile(t4, Index{2, 1})
+	t5.SetValue(2)
+	board.AddTile(t5, Index{0, 3})
+	t6.SetValue(1)
+	board.AddTile(t6, Index{1, 3})
+	t7.SetValue(3)
+	board.AddTile(t7, Index{1, 0})
+	fmt.Println(board)
+	fmt.Println()
+	board.Slide(Left)
+	board.Slide(Down)
+	board.Slide(Down)
+	board.Slide(Down)
+	board.Slide(Left)
+	fmt.Println(board)
+
+	expected = `|     0 |     0 |     0 |     0 |
+|    12 |     0 |     0 |     0 |
+|     3 |     0 |     0 |     0 |
+|    12 |     3 |     0 |     0 |`
+
+	if board.String() != expected {
+		t.Errorf("Incorrect board configuration: expected\n%s\nactual\n%s\n", expected, board)
+	}
+}
