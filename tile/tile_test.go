@@ -36,29 +36,29 @@ func TestTile_IsEmpty(t *testing.T) {
 }
 
 func TestMerge(t *testing.T) {
-	t1 := Tile{3}
-	t2 := Tile{3}
+	source := Tile{3}
+	destination := Tile{3}
 
-	tile, err := Merge(t1, t2)
+	tile, err := Merge(source, destination)
 	if err != nil {
 		t.Error("Tiles of equal value were not merged")
 	}
 
-	if tile.value != t1.value+t2.value {
-		t.Errorf("Unepexted merge value: wanted %v, but got %v", t1.value+t2.value, tile.value)
+	if tile.value != source.value+destination.value {
+		t.Errorf("Unepexted merge value: wanted %v, but got %v", source.value+destination.value, tile.value)
 	}
 
-	t1.SetValue(6)
+	source.SetValue(6)
 
-	tile, err = Merge(t1, t2)
+	tile, err = Merge(source, destination)
 	if err == nil {
 		t.Error("Tiles of unequal value cannot be merged")
 	}
 
-	t1.SetValue(1)
-	t2.SetValue(2)
+	source.SetValue(1)
+	destination.SetValue(2)
 
-	tile, err = Merge(t1, t2)
+	tile, err = Merge(source, destination)
 	if err != nil {
 		t.Error("Tile with value 1 not merged with tile of value 2")
 	}
@@ -67,28 +67,37 @@ func TestMerge(t *testing.T) {
 		t.Errorf("Unepexted merge value: wanted %v, but got %v", 3, tile.value)
 	}
 
-	t1.SetValue(1)
-	t2.SetValue(1)
+	source.SetValue(1)
+	destination.SetValue(1)
 
-	tile, err = Merge(t1, t2)
+	tile, err = Merge(source, destination)
 	if err == nil {
 		t.Error("Tiles of value 1 can only be merged with tiles of value 2")
 	}
 
-	t1.SetValue(2)
-	t2.SetValue(2)
+	source.SetValue(2)
+	destination.SetValue(2)
 
-	tile, err = Merge(t1, t2)
+	tile, err = Merge(source, destination)
 	if err == nil {
 		t.Error("Tiles of value 1 can only be merged with tiles of value 2")
 	}
 
-	t1.SetValue(0)
-	t2.SetValue(2)
+	source.SetValue(2)
+	destination.SetValue(0)
 
-	tile, err = Merge(t1, t2)
+	tile, err = Merge(source, destination)
 	if err != nil {
 		t.Error("Tile not merged with empty tile")
+	}
+
+	source.SetValue(0)
+	destination.SetValue(1)
+
+	tile, err = Merge(source, destination)
+	fmt.Println(err)
+	if err == nil {
+		t.Error("Empty source tile cannot be merged")
 	}
 }
 
