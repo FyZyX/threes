@@ -82,6 +82,14 @@ func TestMerge(t *testing.T) {
 	if err == nil {
 		t.Error("Tiles of value 1 can only be merged with tiles of value 2")
 	}
+
+	t1.SetValue(0)
+	t2.SetValue(2)
+
+	tile, err = Merge(t1, t2)
+	if err != nil {
+		t.Error("Tile not merged with empty tile")
+	}
 }
 
 func TestTile_String(t *testing.T) {

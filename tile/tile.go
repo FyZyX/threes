@@ -30,14 +30,23 @@ func (tile Tile) IsEmpty() bool {
 }
 
 func Merge(t1 Tile, t2 Tile) (tile Tile, err error) {
+	// Any tile can be merged with an empty tile
+	if t1.value == 0 || t2.value == 0 {
+		return Tile{t1.value + t2.value}, err
+	}
+
+	// 1s cannot be merged with 1s
+	// 2s cannot be merged with 2s
 	if t1.value < 3 && (t1.value == t2.value) {
 		return tile, IncompatibleTilesError{t1, t2}
 	}
 
+	// 1s can be merged with 2s
 	if t1.value+t2.value == 3 {
 		return Tile{3}, err
 	}
 
+	// tiles with unequal values cannot be merged
 	if t1.value != t2.value {
 		return tile, IncompatibleTilesError{t1, t2}
 	}
