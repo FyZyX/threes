@@ -8,8 +8,8 @@ import (
 type (
 	Direction uint8
 
-	row   [4]Tile
-	Board [4]row
+	Row   [4]Tile
+	Board [4]Row
 
 	Index struct {
 		Row    int
@@ -28,7 +28,7 @@ const (
 	Right
 )
 
-func (board *Board) AddTile(tile Tile, index Index) {
+func (board *Board) AddTileAt(tile Tile, index Index) {
 	board[index.Row][index.Column] = tile
 }
 
@@ -85,9 +85,9 @@ func (board *Board) Slide(direction Direction) []Index {
 			}
 
 			// place the merged tile in the destination index
-			board.AddTile(tile, destination)
+			board.AddTileAt(tile, destination)
 			// place an empty tile in the source index
-			board.AddTile(Tile{}, source)
+			board.AddTileAt(Tile{}, source)
 
 			// mark column as moved
 			moved[j] = true
@@ -105,7 +105,7 @@ func (board *Board) Slide(direction Direction) []Index {
 	return indices
 }
 
-func (row row) String() string {
+func (row Row) String() string {
 	return fmt.Sprintf(`| %5v | %5v | %5v | %5v |`, row[0], row[1], row[2], row[3])
 }
 
