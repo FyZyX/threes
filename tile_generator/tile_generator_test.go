@@ -6,11 +6,23 @@ import (
 )
 
 func TestSimpleTileGenerator_Generate(t *testing.T) {
-	generator := SimpleTileGenerator{}
+	generator := NewSimpleTileGenerator()
 	tile := generator.Generate()
+
+	if len(generator.deck) != 11 {
+		t.Error("Generated tile not removed from deck")
+	}
 
 	if tile.IsEmpty() {
 		t.Error("Generated tiles cannot be empty")
+	}
+
+	for i := 0; i < 11; i++ {
+		generator.Generate()
+	}
+
+	if len(generator.deck) != 12 {
+		t.Error("New deck not created on last pop")
 	}
 }
 
