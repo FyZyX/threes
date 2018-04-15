@@ -60,16 +60,13 @@ func TestBoard_AddTile(t *testing.T) {
 }
 
 func TestBoard_Slide(t *testing.T) {
-	var tile Tile
-	tile.SetValue(3)
-
 	var board Board
-	index := Index{0, 0}
+	var indices []Index
 
 	var t1, t2, t3, t4, t5, t6, t7 Tile
 
-	fmt.Println()
-	board.AddTile(tile, index)
+	t1.SetValue(3)
+	board.AddTile(t1, Index{0, 0})
 	t2.SetValue(3)
 	board.AddTile(t2, Index{0, 1})
 	t3.SetValue(3)
@@ -84,9 +81,18 @@ func TestBoard_Slide(t *testing.T) {
 	board.AddTile(t7, Index{1, 0})
 	fmt.Println(board)
 	fmt.Println()
-	board.Slide(Up)
-	board.Slide(Right)
-	board.Slide(Right)
+	indices = board.Slide(Up)
+	if len(indices) != 3 {
+		t.Errorf("Incorrect number of next indices")
+	}
+	indices = board.Slide(Right)
+	if len(indices) != 2 {
+		t.Errorf("Incorrect number of next indices")
+	}
+	indices = board.Slide(Right)
+	if len(indices) != 2 {
+		t.Errorf("Incorrect number of next indices")
+	}
 	fmt.Println(board)
 
 	expected := `|     0 |     0 |     6 |    12 |
@@ -116,11 +122,28 @@ func TestBoard_Slide(t *testing.T) {
 	board.AddTile(t7, Index{1, 0})
 	fmt.Println(board)
 	fmt.Println()
-	board.Slide(Left)
-	board.Slide(Down)
-	board.Slide(Down)
-	board.Slide(Down)
-	board.Slide(Left)
+	indices = board.Slide(Left)
+	if len(indices) != 3 {
+		t.Errorf("Incorrect number of next indices")
+	}
+	indices = board.Slide(Down)
+	if len(indices) != 3 {
+		t.Errorf("Incorrect number of next indices")
+	}
+	indices = board.Slide(Down)
+	if len(indices) != 2 {
+		t.Errorf("Incorrect number of next indices")
+	}
+	indices = board.Slide(Down)
+	if len(indices) != 1 {
+		t.Errorf("Incorrect number of next indices")
+	}
+	fmt.Println(board)
+	indices = board.Slide(Left)
+	fmt.Println(indices)
+	if len(indices) != 1 {
+		t.Errorf("Incorrect number of next indices")
+	}
 	fmt.Println(board)
 
 	expected = `|     0 |     0 |     0 |     0 |

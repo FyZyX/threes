@@ -58,7 +58,7 @@ func (index Index) rotate(direction Direction) Index {
 	}
 }
 
-func (board *Board) Slide(direction Direction) {
+func (board *Board) Slide(direction Direction) []Index {
 	/* This algorithm is based on the following observations:
 	 * swipe LEFT is the same as swipe UP after a clockwise rotation
 	 * swipe RIGHT is the same as swipe UP after a counter-clockwise rotation
@@ -66,6 +66,8 @@ func (board *Board) Slide(direction Direction) {
 	 *
 	 * All comments refer to swipe UP, though the indices are rotated in the specified direction
 	 */
+
+	var moved [len(board)]bool
 
 	// since the first row is at the bounds, loop over only the latter three rows
 	for i, row := range board[1:] {
@@ -86,8 +88,21 @@ func (board *Board) Slide(direction Direction) {
 			board.AddTile(tile, destination)
 			// place an empty tile in the source index
 			board.AddTile(Tile{}, source)
+
+			// mark column as moved
+			moved[j] = true
 		}
 	}
+
+	// return all possible indices where a new tile can be generated
+	var indices []Index
+	for i, wasMoved := range moved {
+		if wasMoved {
+			indices = append(indices, Index{3, i}.rotate(direction))
+		}
+	}
+
+	return indices
 }
 
 func (row row) String() string {
