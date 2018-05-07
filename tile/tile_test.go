@@ -101,6 +101,39 @@ func TestMerge(t *testing.T) {
 	}
 }
 
+func TestTile_Merges(t *testing.T) {
+	tile := Tile{}
+	tile.SetValue(1)
+	if tile.Merges() != 0 {
+		t.Errorf("Incorrect number of merges for tile with value %v", tile.value)
+	}
+
+	tile.SetValue(2)
+	if tile.Merges() != 0 {
+		t.Errorf("Incorrect number of merges for tile with value %v", tile.value)
+	}
+
+	tile.SetValue(3)
+	if tile.Merges() != 1 {
+		t.Errorf("Incorrect number of merges for tile with value %v", tile.value)
+	}
+
+	tile.SetValue(6)
+	if tile.Merges() != 2 {
+		t.Errorf("Incorrect number of merges for tile with value %v", tile.value)
+	}
+
+	tile.SetValue(48)
+	if tile.Merges() != 5 {
+		t.Errorf("Incorrect number of merges for tile with value %v", tile.value)
+	}
+
+	tile.SetValue(384)
+	if tile.Merges() != 8 {
+		t.Errorf("Incorrect number of merges for tile with value %v", tile.value)
+	}
+}
+
 func TestTile_String(t *testing.T) {
 	tile := Tile{3}
 	tileString := `3`

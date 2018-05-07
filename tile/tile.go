@@ -3,10 +3,11 @@ package tile
 import (
 	"errors"
 	"fmt"
+	"math"
 )
 
 type (
-	Value uint8
+	Value uint16
 
 	Tile struct {
 		value Value
@@ -58,6 +59,15 @@ func Merge(source Tile, destination Tile) (tile Tile, err error) {
 	}
 
 	return Tile{source.value + destination.value}, err
+}
+
+func (tile Tile) Merges() int {
+	if tile.value < 3 {
+		return 0
+	}
+
+	base := float64(tile.value / 3)
+	return int(math.Log2(base)) + 1
 }
 
 func (tile Tile) String() string {
