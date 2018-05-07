@@ -13,8 +13,10 @@ type (
 	}
 
 	BonusTileGenerator struct {
-		maxValue       Value
-		possibleValues []Value
+		probability     float32
+		reductionFactor Value
+		maxValue        Value
+		possibleValues  []Value
 	}
 )
 
@@ -56,32 +58,32 @@ func (generator *SimpleTileGenerator) Generate() (tile Tile) {
 }
 
 func NewBonusTileGenerator(maxTileValue Value) BonusTileGenerator {
-	generator := BonusTileGenerator{}
+	generator := BonusTileGenerator{
+		probability:     1. / 21,
+		reductionFactor: 8,
+	}
 	generator.SetMaxValue(maxTileValue)
-	generator.generatePossibleValues()
 	return generator
 }
 
-func (generator BonusTileGenerator) generatePossibleValues() (possibleValues []Value) {
+func (generator *BonusTileGenerator) generatePossibleValues() {
+	var possibleValues []Value
 	value := generator.maxValue
 	for value > 3 {
 		possibleValues = append(possibleValues, value)
 		value /= 2
 	}
 
-	return possibleValues
-}
-
-func (generator BonusTileGenerator) PossibleValues() (possibleValues []Value) {
-	return generator.possibleValues
+	generator.possibleValues = possibleValues
 }
 
 func (generator *BonusTileGenerator) SetMaxValue(maxTileValue Value) {
-	generator.maxValue = maxTileValue / 8
+	generator.maxValue = maxTileValue / generator.reductionFactor
+	generator.generatePossibleValues()
 }
 
 func (generator BonusTileGenerator) ShouldGenerate() bool {
-	return generator.maxValue > 0 && rand.Float32() < 1/21
+	return len(generator.possibleValues) > 0 && rand.Float32() < generator.probability
 }
 
 func randomValue(values []Value) Value {
@@ -89,6 +91,6 @@ func randomValue(values []Value) Value {
 }
 
 func (generator BonusTileGenerator) Generate() (tile Tile) {
-	tile.SetValue(randomValue(generator.generatePossibleValues()))
+	tile.SetValue(randomValue(generator.possibleValues))
 	return tile
 }

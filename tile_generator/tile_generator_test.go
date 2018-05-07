@@ -38,7 +38,7 @@ func TestNewBonusTileGenerator(t *testing.T) {
 
 func TestBonusTileGenerator_PossibleValues(t *testing.T) {
 	generator := NewBonusTileGenerator(48)
-	values := generator.PossibleValues()
+	values := generator.possibleValues
 
 	expected := [1]Value{6}
 	if len(values) != 1 || values[0] != 6 {
