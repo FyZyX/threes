@@ -26,20 +26,39 @@ func TestSimpleTileGenerator_Generate(t *testing.T) {
 	}
 }
 
-func TestBonusTileGenerator_SetMaxValue(t *testing.T) {
-	var maxTileValue Value = 48
+func TestNewBonusTileGenerator(t *testing.T) {
+	var maxTileValue Value = 384
 
-	var generator BonusTileGenerator
-	generator.SetMaxValue(maxTileValue)
+	generator := NewBonusTileGenerator(maxTileValue)
 
 	if generator.maxValue != maxTileValue/8 {
 		t.Error("Max value should be 1/8 of the maximum tile value")
 	}
 }
 
-func TestBonusTileGenerator_Generate(t *testing.T) {
+func TestBonusTileGenerator_PossibleValues(t *testing.T) {
+	generator := NewBonusTileGenerator(48)
+	values := generator.PossibleValues()
+
+	expected := [1]Value{6}
+	if len(values) != 1 || values[0] != 6 {
+		t.Errorf("expected %v, got %v instead", expected, values)
+	}
+}
+
+func TestBonusTileGenerator_SetMaxValue(t *testing.T) {
 	var generator BonusTileGenerator
-	generator.SetMaxValue(48)
+	var maxTileValue Value = 192
+
+	generator.SetMaxValue(maxTileValue)
+
+	if generator.maxValue != 24 {
+		t.Error("Max value should be 1/8 of the maximum tile value")
+	}
+}
+
+func TestBonusTileGenerator_Generate(t *testing.T) {
+	generator := NewBonusTileGenerator(48)
 	tile := generator.Generate()
 
 	if tile.IsEmpty() {
