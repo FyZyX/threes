@@ -28,14 +28,13 @@ func NewGame() Game {
 	var tilesAdded int
 	for tilesAdded < 8 {
 		if index := NewRandomIndex(); game.board.TileAt(index).IsEmpty() {
-			tile := generator.Generate()
-			game.board.AddTileAt(tile, index)
+			game.nextTile = generator.Generate()
+			game.addNextTileAt(index)
 			tilesAdded++
 		}
 	}
 
 	game.nextTile = game.generateNextTile()
-	game.updateMaxTileValue()
 
 	return game
 }
@@ -45,19 +44,16 @@ func randomIndex(indices []Index) Index {
 }
 
 func (game *Game) generateNextTile() Tile {
-	var tile Tile
-
 	if bonusGenerator.ShouldGenerate() {
-		tile = bonusGenerator.Generate()
+		return bonusGenerator.Generate()
 	} else {
-		tile = generator.Generate()
+		return generator.Generate()
 	}
-
-	return tile
 }
 
 func (game *Game) addNextTileAt(index Index) {
 	game.board.AddTileAt(game.nextTile, index)
+	game.updateMaxTileValue()
 }
 
 func (game *Game) Swipe(direction Direction) {
@@ -66,7 +62,7 @@ func (game *Game) Swipe(direction Direction) {
 		fmt.Sprintf("cannot swipe board %s", direction)
 	} else {
 		game.addNextTileAt(randomIndex(indices))
-		game.updateMaxTileValue()
+		game.nextTile = game.generateNextTile()
 	}
 }
 
@@ -97,13 +93,19 @@ func (game *Game) BestMove() Direction {
 	var bestDirection Direction
 	directions := []Direction{Up, Down, Left, Right}
 	for _, direction := range directions {
-		game := *game
-		indices, _ := game.board.Slide(direction)
-		score := game.board.Score()
+		board := (*game).board
+		indices, _ := board.Slide(direction)
 		//fmt.Printf("Checking %s, score is %v\n", direction, score)
 		if len(indices) > 0 {
 			possibleDirections = append(possibleDirections, direction)
 
+			var score float64
+			for _, index := range indices {
+				possibleBoard := board
+				possibleBoard.AddTileAt(game.nextTile, index)
+				score += possibleBoard.Score()
+			}
+			score /= float64(len(indices))
 			if score > bestScore {
 				//fmt.Printf("%s is better\n", direction)
 				bestScore = score
