@@ -3,6 +3,7 @@ package board
 import (
 	. "Threes/tile"
 	"fmt"
+	"math"
 )
 
 type (
@@ -103,6 +104,18 @@ func (board *Board) Slide(direction Direction) []Index {
 	}
 
 	return indices
+}
+
+func (board Board) Score() (score float64) {
+	for _, row := range board {
+		for _, tile := range row {
+			if tile.IsEmpty() {
+				continue
+			}
+			score += math.Pow(3, float64(tile.Merges()))
+		}
+	}
+	return score
 }
 
 func (row Row) String() string {
