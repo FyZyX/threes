@@ -124,10 +124,32 @@ func (board Board) Score() (score float64) {
 	return score
 }
 
+func NewRandomIndex() Index {
+	return Index{
+		Row:    rand.Intn(4),
+		Column: rand.Intn(4),
+	}
+}
+
 func (row Row) String() string {
 	return fmt.Sprintf(`| %5v | %5v | %5v | %5v |`, row[0], row[1], row[2], row[3])
 }
 
 func (board Board) String() string {
 	return fmt.Sprintf("%v\n%v\n%v\n%v", board[0], board[1], board[2], board[3])
+}
+
+func (direction Direction) String() string {
+	switch direction {
+	case Up:
+		return "up"
+	case Down:
+		return "down"
+	case Left:
+		return "left"
+	case Right:
+		return "right"
+	default:
+		return "unknown direction"
+	}
 }
