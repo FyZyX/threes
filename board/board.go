@@ -2,8 +2,10 @@ package board
 
 import (
 	. "Threes/tile"
+	"errors"
 	"fmt"
 	"math"
+	"math/rand"
 )
 
 type (
@@ -59,7 +61,7 @@ func (index Index) rotate(direction Direction) Index {
 	}
 }
 
-func (board *Board) Slide(direction Direction) []Index {
+func (board *Board) Slide(direction Direction) (indices []Index, err error) {
 	/* This algorithm is based on the following observations:
 	 * swipe LEFT is the same as swipe UP after a clockwise rotation
 	 * swipe RIGHT is the same as swipe UP after a counter-clockwise rotation
@@ -96,14 +98,18 @@ func (board *Board) Slide(direction Direction) []Index {
 	}
 
 	// return all possible indices where a new tile can be generated
-	var indices []Index
 	for i, wasMoved := range moved {
 		if wasMoved {
 			indices = append(indices, Index{3, i}.rotate(direction))
 		}
 	}
 
-	return indices
+	if len(indices) == 0 {
+		err = errors.New(fmt.Sprintf("cannot slide board %s", direction))
+		return
+	}
+
+	return
 }
 
 func (board Board) Score() (score float64) {
