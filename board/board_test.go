@@ -81,16 +81,16 @@ func TestBoard_Slide(t *testing.T) {
 	board.AddTileAt(t7, Index{1, 0})
 	fmt.Println(board)
 	fmt.Println()
-	indices = board.Slide(Up)
+	indices, _ = board.Slide(Up)
 	fmt.Println(indices)
 	if len(indices) != 3 {
 		t.Errorf("Incorrect number of next indices")
 	}
-	indices = board.Slide(Right)
+	indices, _ = board.Slide(Right)
 	if len(indices) != 2 {
 		t.Errorf("Incorrect number of next indices")
 	}
-	indices = board.Slide(Right)
+	indices, _ = board.Slide(Right)
 	if len(indices) != 2 {
 		t.Errorf("Incorrect number of next indices")
 	}
@@ -123,24 +123,24 @@ func TestBoard_Slide(t *testing.T) {
 	board.AddTileAt(t7, Index{1, 0})
 	fmt.Println(board)
 	fmt.Println()
-	indices = board.Slide(Left)
+	indices, _ = board.Slide(Left)
 	if len(indices) != 3 {
 		t.Errorf("Incorrect number of next indices")
 	}
-	indices = board.Slide(Down)
+	indices, _ = board.Slide(Down)
 	if len(indices) != 3 {
 		t.Errorf("Incorrect number of next indices")
 	}
-	indices = board.Slide(Down)
+	indices, _ = board.Slide(Down)
 	if len(indices) != 2 {
 		t.Errorf("Incorrect number of next indices")
 	}
-	indices = board.Slide(Down)
+	indices, _ = board.Slide(Down)
 	if len(indices) != 1 {
 		t.Errorf("Incorrect number of next indices")
 	}
 	fmt.Println(board)
-	indices = board.Slide(Left)
+	indices, _ = board.Slide(Left)
 	fmt.Println(indices)
 	if len(indices) != 1 {
 		t.Errorf("Incorrect number of next indices")
@@ -154,5 +154,32 @@ func TestBoard_Slide(t *testing.T) {
 
 	if board.String() != expected {
 		t.Errorf("Incorrect board configuration: expected\n%s\nactual\n%s\n", expected, board)
+	}
+}
+
+func TestBoard_Score(t *testing.T) {
+	var board Board
+
+	var t1, t2, t3, t4, t5, t6, t7 Tile
+
+	t1.SetValue(3)
+	board.AddTileAt(t1, Index{0, 0})
+	t2.SetValue(6)
+	board.AddTileAt(t2, Index{0, 1})
+	t3.SetValue(3)
+	board.AddTileAt(t3, Index{1, 1})
+	t4.SetValue(24)
+	board.AddTileAt(t4, Index{2, 1})
+	t5.SetValue(6)
+	board.AddTileAt(t5, Index{0, 3})
+	t6.SetValue(3)
+	board.AddTileAt(t6, Index{1, 3})
+	t7.SetValue(12)
+	board.AddTileAt(t7, Index{1, 0})
+	fmt.Println(board)
+
+	var expected float64 = 135
+	if board.Score() != expected {
+		t.Errorf("Score is %v, but should be %v", board.Score(), expected)
 	}
 }
