@@ -18,8 +18,10 @@ type (
 )
 
 var (
-	generator      = NewSimpleTileGenerator()
-	bonusGenerator = NewBonusTileGenerator(0)
+	generator           = NewSimpleTileGenerator()
+	tilesGenerated      int
+	bonusGenerator      = NewBonusTileGenerator(0)
+	bonusTilesGenerated int
 )
 
 func NewGame() Game {
@@ -29,6 +31,7 @@ func NewGame() Game {
 	for tilesAdded < 8 {
 		if index := NewRandomIndex(); game.board.TileAt(index).IsEmpty() {
 			game.nextTile = generator.Generate()
+			tilesGenerated++
 			game.addNextTileAt(index)
 			tilesAdded++
 		}
@@ -46,8 +49,10 @@ func randomIndex(indices []Index) Index {
 func (game *Game) generateNextTile() Tile {
 	if bonusGenerator.ShouldGenerate() {
 		return bonusGenerator.Generate()
+		bonusTilesGenerated++
 	} else {
 		return generator.Generate()
+		tilesGenerated++
 	}
 }
 
